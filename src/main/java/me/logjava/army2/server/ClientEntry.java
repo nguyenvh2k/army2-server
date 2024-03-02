@@ -3,6 +3,8 @@ package me.logjava.army2.server;
 import me.logjava.army2.network.IMessageHandler;
 import me.logjava.army2.network.ISession;
 import me.logjava.army2.network.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,6 +19,8 @@ import java.util.regex.Pattern;
  * @author Văn Tú
  */
 public class ClientEntry implements ISession {
+
+    public static final Logger logger = LoggerFactory.getLogger(ClientEntry.class);
 
     private class Sender implements Runnable {
 
@@ -43,7 +47,7 @@ public class ClientEntry implements ISession {
                     Thread.sleep(10);
                 }
             } catch (Exception e) {
-                System.out.println("Socket is closed!");
+                logger.info("Socket is closed!");
             } 
         }
     }
@@ -180,7 +184,7 @@ public class ClientEntry implements ISession {
                         dos.writeByte(byte1);
                         int byte2 = writeKey((byte) (size & 0xFF));
                         dos.writeByte(byte2);
-                        // System.out.println("l1=" + byte1 + " l2=" + byte2 + " k1"+key1+" k2="+key2);
+                        // logger.info("l1=" + byte1 + " l2=" + byte2 + " k1"+key1+" k2="+key2);
                     } else {
                         dos.writeShort(size);
                     }
@@ -310,18 +314,18 @@ public class ClientEntry implements ISession {
             this.sendMessage(ms);
             return;
         }
-        System.out.println("Client: " + id + " name: " + userS + " pass: " + pass + " version: " + version);
+        logger.info("Client: " + id + " name: " + userS + " pass: " + pass + " version: " + version);
         this.versionARM = version;
         User us = User.login(this, userS, pass);
         if (us != null) {
-            System.out.println("Login Success!");
+            logger.info("Login Success!");
             this.login = true;
             this.user = us;
             ServerManager.sendNVData(user);
             ServerManager.sendRoomInfo(user);
             ServerManager.sendMapCollisionInfo(user);
         } else {
-            System.out.println("Login Failse!");
+            logger.info("Login Failse!");
             this.login = false;
         }
     }
@@ -386,13 +390,13 @@ public class ClientEntry implements ISession {
 //                    ds.writeUTF(GameString.reg_Error5());
 //                    ds.flush();
 //                    this.sendMessage(ms);
-//                    System.out.println("regtry True name: "+ name +" pass: "+ pass);
+//                    logger.info("regtry True name: "+ name +" pass: "+ pass);
 //                }
 //                red.close();
 //            }
 //        } catch(IOException | SQLException e) {
 //            e.printStackTrace();
-//            System.out.println("regtry False");
+//            logger.info("regtry False");
 //        }
     }
 

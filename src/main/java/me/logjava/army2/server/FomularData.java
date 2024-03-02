@@ -5,6 +5,9 @@
  */
 package me.logjava.army2.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 /**
@@ -12,6 +15,8 @@ import java.util.ArrayList;
  * @author ASD
  */
 public class FomularData {
+
+    public static final Logger logger = LoggerFactory.getLogger(FomularData.class);
 
     public static class FomularDataEntry {
 
@@ -38,7 +43,7 @@ public class FomularData {
     public static ArrayList<FomularDataEntry> entrys;
 
     public static void addFomularEntry(int materialId, byte equipType, short[] eqId, short[] eqNeedId, FomularEntry fEntry) {
-        System.out.println("Set fomular materialId=" + materialId + " equipType=" + equipType);
+        logger.info("Set fomular materialId=" + materialId + " equipType=" + equipType);
         FomularDataEntry fDatEntry = null;
         for (FomularDataEntry fDatEntry2 : entrys) {
             if (fDatEntry2.ins.id == materialId) {

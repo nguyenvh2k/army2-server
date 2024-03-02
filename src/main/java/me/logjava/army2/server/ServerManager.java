@@ -6,6 +6,8 @@ import me.logjava.army2.team.TeamImageOutput;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -30,6 +32,8 @@ import static me.logjava.army2.server.User.nvEquipDefault;
  * @author Văm Tú
  */
 public class ServerManager {
+
+    public static final Logger logger = LoggerFactory.getLogger(ServerManager.class);
 
     private static boolean debug;
     private static byte n_area;
@@ -98,7 +102,7 @@ public class ServerManager {
                     DataOutputStream ds = new DataOutputStream(bas);
                     int numMap = MapData.entrys.size();
                     ds.writeByte(numMap);
-                    System.out.println("Init map entry numMap=" + numMap);
+                    logger.info("Init map entry numMap=" + numMap);
                     for (int i = 0; i < numMap; i++) {
                         MapData.MapDataEntry mapEntry = MapData.entrys.get(i);
                         ds.writeByte(mapEntry.id);
@@ -111,7 +115,7 @@ public class ServerManager {
                         ds.writeShort(mapEntry.cl2AddY);
                         ds.writeUTF(mapEntry.name);
                         ds.writeUTF(mapEntry.file);
-                        System.out.println("   - id= " + mapEntry.id + " name= " + mapEntry.name + " file= " + mapEntry.file);
+                        logger.info("   - id= " + mapEntry.id + " name= " + mapEntry.name + " file= " + mapEntry.file);
                     }
                     byte[] ab = bas.toByteArray();
                     Until.saveFile("cache/valuesdata2", ab);
@@ -124,7 +128,7 @@ public class ServerManager {
                     DataOutputStream ds1 = new DataOutputStream(bas1);
                     int numChamp = NVData.entrys.size();
                     ds1.writeByte(numChamp);
-                    System.out.println("Init nhan vat numNV= " + numChamp);
+                    logger.info("Init nhan vat numNV= " + numChamp);
                     for (int i = 0; i < numChamp; i++) {
                         NVData.NVEntry nvEntry = NVData.entrys.get(i);
                         ds1.writeByte(nvEntry.id);
@@ -162,16 +166,16 @@ public class ServerManager {
 
                     byte[] dat = Until.getFile("res/item_special.png");
                     if (dat == null) {
-                        System.out.println("File item_special.png not found!");
+                        logger.info("File item_special.png not found!");
                         System.exit(0);
                     }
-                    System.out.println("[coreLG/a] " + "Lent Icon= " + dat.length);
+                    logger.info("[coreLG/a] " + "Lent Icon= " + dat.length);
                     ds1.writeShort(dat.length);
                     ds1.write(dat);
                     for (int i = 0; i < numChamp; i++) {
                         dat = Until.getFile("res/bullet" + i + ".png");
                         if (dat == null) {
-                            System.out.println("File bullet" + i + ".png not found!");
+                            logger.info("File bullet" + i + ".png not found!");
                             System.exit(0);
                         }
                         ds1.writeShort(dat.length);
@@ -190,12 +194,12 @@ public class ServerManager {
                     DataOutputStream ds2 = new DataOutputStream(bas2);
                     int numCaption = CaptionData.entrys.size();
                     ds2.writeByte(numCaption);
-                    System.out.println("Init caption entry numCaption= " + numCaption);
+                    logger.info("Init caption entry numCaption= " + numCaption);
                     for (int i = numCaption - 1; i >= 0; i--) {
                         CaptionData.CaptionEntry capEntry = CaptionData.entrys.get(i);
                         ds2.writeUTF(capEntry.caption);
                         ds2.writeByte(capEntry.level);
-                        System.out.println("  lvl= " + capEntry.level + " str= " + capEntry.caption);
+                        logger.info("  lvl= " + capEntry.level + " str= " + capEntry.caption);
                     }
                     byte[] ab2 = bas2.toByteArray();
                     Until.saveFile("cache/levelCData2", ab2);
@@ -206,12 +210,12 @@ public class ServerManager {
                     DataOutputStream ds2_1 = new DataOutputStream(bas2_1);
                     int numCaption_1 = CaptionData.entrys_1.size();
                     ds2_1.writeByte(numCaption_1);
-                    System.out.println("Init caption entry numCaption_1= " + numCaption_1);
+                    logger.info("Init caption entry numCaption_1= " + numCaption_1);
                     for (int i = numCaption_1 - 1; i >= 0; i--) {
                         CaptionData.CaptionEntry capEntry_1 = CaptionData.entrys_1.get(i);
                         ds2_1.writeUTF(capEntry_1.caption);
                         ds2_1.writeByte(capEntry_1.level);
-                        System.out.println("  lvl= " + capEntry_1.level + " str= " + capEntry_1.caption);
+                        logger.info("  lvl= " + capEntry_1.level + " str= " + capEntry_1.caption);
                     }
                     byte[] ab2_1 = bas2_1.toByteArray();
                     Until.saveFile("cache/levelCData2_1", ab2_1);
@@ -220,7 +224,7 @@ public class ServerManager {
                     break;
 
                 case 3:
-                    System.out.println("Cache player image!");
+                    logger.info("Cache player image!");
                     TeamImageOutput tos = new TeamImageOutput();
                     File playerDir = new File("res/player");
                     if (!playerDir.exists()) {
@@ -235,7 +239,7 @@ public class ServerManager {
                     break;
 
                 case 4:
-                    System.out.println("Cache map icon!");
+                    logger.info("Cache map icon!");
                     TeamImageOutput tos2 = new TeamImageOutput();
                     File mapDir = new File("res/map/icon");
                     if (!mapDir.exists()) {
@@ -351,7 +355,7 @@ public class ServerManager {
     private static void loadConfigFile() {
         byte[] ab = Until.getFile("army2.conf");
         if (ab == null) {
-            System.out.println("Config file not found!");
+            logger.info("Config file not found!");
             System.exit(0);
         }
         String data = new String(ab);
@@ -369,7 +373,7 @@ public class ServerManager {
                         String key = sbf.substring(0, j).trim();
                         String value = sbf.substring(j + 1).trim();
                         configMap.put(key, value);
-                        System.out.println("config: " + key + "-" + value);
+                        logger.info("config: " + key + "-" + value);
                     }
                 }
                 sbd.setLength(0);
@@ -583,7 +587,7 @@ public class ServerManager {
         start = false;
         loadConfigFile();
         SQLManager.create(mysql_host, mysql_database, mysql_user, mysql_pass);
-        System.out.println("Load map data");
+        logger.info("Load map data");
         ResultSet res;
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `map`;");
@@ -612,7 +616,7 @@ public class ServerManager {
             System.exit(0);
         }
         setCache((byte) 0);
-        System.out.println("Load NV Data!");
+        logger.info("Load NV Data!");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `nhanvat`;");
             NVData.entrys = new ArrayList<>();
@@ -722,9 +726,9 @@ public class ServerManager {
                 nvEquipDefault[i][j] = NVData.getEquipEntryById(i, j, defaultNvData[i][j]);
             }
         }
-        System.out.println("NV Loader Size= " + NVData.entrys.size());
+        logger.info("NV Loader Size= " + NVData.entrys.size());
         setCache((byte) 1);
-        System.out.println("Load caption level!");
+        logger.info("Load caption level!");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `captionlv`;");
             CaptionData.entrys = new ArrayList<>();
@@ -736,7 +740,7 @@ public class ServerManager {
                 capEntry.caption = res.getString("caption");
                 CaptionData.entrys.add(capEntry);
             }
-            System.out.println("Load caption level 2 new!");
+            logger.info("Load caption level 2 new!");
             res.close();
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `captionlv_1`;");
             CaptionData.entrys_1 = new ArrayList<>();
@@ -754,7 +758,7 @@ public class ServerManager {
             System.exit(0);
         }
         setCache((byte) 2);
-        System.out.println("Load Item Data!");
+        logger.info("Load Item Data!");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `item`;");
             ItemData.entrys = new ArrayList<>();
@@ -768,17 +772,17 @@ public class ServerManager {
                 iEntry.buyLuong = res.getInt("luong");
                 ItemData.entrys.add(iEntry);
             }
-            System.out.println("Item readed size=" + ItemData.entrys.size());
+            logger.info("Item readed size=" + ItemData.entrys.size());
             res.close();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
         }
         setCache((byte) 3);
-        System.out.println("Load Item Clam Data");
+        logger.info("Load Item Clam Data");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `clanshop`;");
-            System.out.println("load item clan");
+            logger.info("load item clan");
             ItemClanData.entrys = new ArrayList<>();
             while (res.next()) {
                 ItemClanData.ItemClanEntry iEntry = new ItemClanData.ItemClanEntry();
@@ -790,7 +794,7 @@ public class ServerManager {
                 iEntry.xu = res.getInt("xu");
                 iEntry.luong = res.getInt("luong");
                 ItemClanData.entrys.add(iEntry);
-                System.out.println("id " + iEntry.id + " level " + iEntry.level + " name " + iEntry.name);
+                logger.info("id " + iEntry.id + " level " + iEntry.level + " name " + iEntry.name);
             }
             res.close();
         } catch (SQLException e) {
@@ -798,7 +802,7 @@ public class ServerManager {
             System.exit(0);
         }
         setCache((byte) 4);
-        System.out.println("Load Special Item Data!");
+        logger.info("Load Special Item Data!");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `specialItem`;");
             SpecialItemData.entrys = new ArrayList<>();
@@ -832,13 +836,13 @@ public class ServerManager {
                 }
                 SpecialItemData.entrys.add(iEntry);
             }
-            System.out.println("Special Item readed size=" + SpecialItemData.entrys.size());
+            logger.info("Special Item readed size=" + SpecialItemData.entrys.size());
             res.close();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
         }
-        System.out.println("Load fomular data");
+        logger.info("Load fomular data");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `fomular`;");
             FomularData.entrys = new ArrayList();
@@ -893,13 +897,13 @@ public class ServerManager {
                 }
                 FomularData.addFomularEntry(materialId, equipType, eqId, eqNeedId, fE);
             }
-            System.out.println("Fomular readed size=" + FomularData.entrys.size());
+            logger.info("Fomular readed size=" + FomularData.entrys.size());
             res.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
-        System.out.println("Load nap the data");
+        logger.info("Load nap the data");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `napthe`;");
             NapTienData.entrys = new ArrayList<>();
@@ -912,13 +916,13 @@ public class ServerManager {
                 nE.mssContent = res.getString("mssContent");
                 NapTienData.entrys.add(nE);
             }
-            System.out.println("Nap the readed size=" + NapTienData.entrys.size());
+            logger.info("Nap the readed size=" + NapTienData.entrys.size());
             res.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
-        System.out.println("Load mission data");
+        logger.info("Load mission data");
         try {
             res = SQLManager.getStatement().executeQuery("SELECT * FROM `mission`;");
             MissionData.entrys = new ArrayList<>();
@@ -937,7 +941,7 @@ public class ServerManager {
                 mE.rewardCUP = res.getInt("rewardCUP");
                 MissionData.addMissionEntry(id, idNeed, mE);
             }
-            System.out.println("Mission readed size=" + MissionData.entrys.size());
+            logger.info("Mission readed size=" + MissionData.entrys.size());
             res.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -946,7 +950,7 @@ public class ServerManager {
     }
 
     protected static void start() {
-        System.out.println("Start socket post=" + post);
+        logger.info("Start socket post=" + post);
         try {
             clients = new ArrayList<>();
             listWait = new ArrayList<>();
@@ -977,7 +981,7 @@ public class ServerManager {
                     numClients++;
                     log("Accept socket " + cl + " done!");
                 } catch (IOException e) {
-                    System.out.println(e.toString());
+                    logger.info(e.toString());
                 }
             }
         } catch (IOException e) {
@@ -1004,15 +1008,15 @@ public class ServerManager {
             clients = null;
             SQLManager.close();
             System.gc();
-            System.out.println("End socket");
+            logger.info("End socket");
         } catch (IOException e) {
-            System.out.println(e.toString());
+            logger.info(e.toString());
         }
     }
 
     public static void log(Object obj) {
         if (debug) {
-            System.out.println(obj);
+            logger.info("{}",obj);
         }
     }
 
@@ -1023,7 +1027,7 @@ public class ServerManager {
         synchronized (clients) {
             clients.remove(cl);
             numClients--;
-            System.out.println("Disconnect client: " + cl);
+            logger.info("Disconnect client: " + cl);
         }
     }
 

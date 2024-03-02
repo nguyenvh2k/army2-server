@@ -1,10 +1,14 @@
 package me.logjava.army2.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author Văn Tú
  */
 public class GameString {
+    public static final Logger logger = LoggerFactory.getLogger(GameString.class);
 
     public static GameString gameString = new GameString();
 

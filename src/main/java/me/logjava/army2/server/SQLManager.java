@@ -1,5 +1,8 @@
 package me.logjava.army2.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 /**
@@ -8,6 +11,8 @@ import java.sql.*;
  * @maintain Hoàng Nguyên
  */
 public class SQLManager {
+
+    public static final Logger logger = LoggerFactory.getLogger(SQLManager.class);
 
     protected static Connection conn;
     protected static Statement stat;
@@ -28,16 +33,16 @@ public class SQLManager {
              */
             Class.forName("com.mysql.cj.jdbc.Driver");  // Kiểm tra driver
         } catch (ClassNotFoundException e) {
-            System.out.println("driver mysql not found!");
+            logger.info("driver mysql not found!");
             System.exit(0);
         }
         String url = "jdbc:mysql://" + host + "/" + database;
-        System.out.println("MySQL connect: " + url);
+        logger.info("MySQL connect: " + url);
         try {
             conn = DriverManager.getConnection(url, user, pass);
             // fix bugs null pointer by Nguyen
             stat = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            System.out.println("Success!");
+            logger.info("Success!");
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
@@ -52,7 +57,7 @@ public class SQLManager {
     }
 
     protected static synchronized boolean close() {
-        System.out.println("Close connection to database");
+        logger.info("Close connection to database");
         try {
             if (stat != null) {
                 stat.close();

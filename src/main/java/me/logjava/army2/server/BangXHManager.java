@@ -1,5 +1,8 @@
 package me.logjava.army2.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -10,6 +13,7 @@ import java.util.*;
  */
 public class BangXHManager {
 
+    public static final Logger logger = LoggerFactory.getLogger(BangXHManager.class);
     public static class BangXHEntry {
 
         int index;
@@ -48,7 +52,7 @@ public class BangXHManager {
                 }
                 refreshTopTeam();
                 isComplete = true;
-                System.out.println("Refresh BXH + TopTeam");
+                logger.info("Refresh BXH + TopTeam");
             }
         }, cl.getTime(), 86400000L);
     }

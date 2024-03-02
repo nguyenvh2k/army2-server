@@ -1,5 +1,8 @@
 package me.logjava.army2.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 /**
@@ -7,6 +10,8 @@ import java.util.ArrayList;
  * @author ASD
  */
 public class NVData {
+
+    public static final Logger logger = LoggerFactory.getLogger(NVData.class);
 
     public static class EquipmentData {
 
@@ -60,7 +65,7 @@ public class NVData {
     public static int nSaleEquip;
 
     public static void addEquipEntryById(int nvId, int equipDatId, int equipId, EquipmentEntry eqEntry) {
-        System.out.println("Set equip nv=" + nvId + " equipType=" + equipDatId + " id=" + equipId);
+        logger.info("Set equip nv=" + nvId + " equipType=" + equipDatId + " id=" + equipId);
         NVEntry nvEntry = null;
         for (NVEntry nvEntry1 : entrys) {
             if (nvEntry1.id == nvId) {

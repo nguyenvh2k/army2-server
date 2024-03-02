@@ -5,6 +5,9 @@
  */
 package me.logjava.army2.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 /**
@@ -12,6 +15,8 @@ import java.util.ArrayList;
  * @author ASD
  */
 public class MissionData {
+
+    public static final Logger logger = LoggerFactory.getLogger(MissionData.class);
 
     public static class MissionEntry {
 
@@ -37,7 +42,7 @@ public class MissionData {
     public static ArrayList<MissDataEntry> entrys;
 
     public static void addMissionEntry(int id, byte idneed, MissionEntry mEntry) {
-        System.out.println("Set mission id=" + id + " idneed=" + idneed);
+        logger.info("Set mission id=" + id + " idneed=" + idneed);
         MissDataEntry mDatE = null;
         for (MissDataEntry mDatE1 : entrys) {
             if (mDatE1.id == id) {

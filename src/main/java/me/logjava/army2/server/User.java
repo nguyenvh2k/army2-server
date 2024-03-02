@@ -7,6 +7,8 @@ import me.logjava.army2.network.Message;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -25,6 +27,8 @@ import java.util.regex.Pattern;
  * @author Văn Tú
  */
 public class User {
+
+    public static final Logger logger = LoggerFactory.getLogger(User.class);
 
     public static class ruongDoItemEntry {
 
